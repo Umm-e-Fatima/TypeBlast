@@ -1,0 +1,53 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+actor User
+participant TypeBlastApp
+participant TextBank
+participant TypingSession
+
+User -> TypeBlastApp : clicks "Start Test" button
+activate TypeBlastApp
+
+TypeBlastApp -> TextBank : get_random()
+activate TextBank
+TextBank --> TypeBlastApp : returns random paragraph string
+deactivate TextBank
+
+TypeBlastApp -> TypingSession ** : TypingSession(target_text) [creates new session]
+
+TypeBlastApp -> TypeBlastApp : displays target text in target widget
+TypeBlastApp -> TypeBlastApp : clears typing area, enables it
+
+TypeBlastApp -> TypingSession : start()
+activate TypingSession
+TypingSession -> TypingSession : records start_time = time.time()
+TypingSession --> TypeBlastApp : session started
+deactivate TypingSession
+
+TypeBlastApp -> TypeBlastApp : updates status bar "⌨️ Type now!"
+
+User -> TypeBlastApp : types a character (KeyRelease event)
+TypeBlastApp -> TypeBlastApp : on_key_release() fires
+TypeBlastApp -> TypeBlastApp : compares typed vs target char by char
+TypeBlastApp -> TypeBlastApp : applies green tag to correct chars
+TypeBlastApp -> TypeBlastApp : applies red tag to wrong chars
+
+User -> TypeBlastApp : clicks "Stop & Results"
+TypeBlastApp -> TypingSession : stop()
+activate TypingSession
+TypingSession -> TypingSession : records end_time
+TypingSession --> TypeBlastApp
+deactivate TypingSession
+
+TypeBlastApp -> TypingSession : get_results(typed_text)
+activate TypingSession
+TypingSession --> TypeBlastApp : returns dict (wpm, accuracy, time, chars)
+deactivate TypingSession
+
+TypeBlastApp -> TypeBlastApp : updates result labels on screen
+TypeBlastApp -> User : shows messagebox with full results
+deactivate TypeBlastApp
+
+@enduml

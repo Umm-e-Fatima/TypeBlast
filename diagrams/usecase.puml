@@ -1,0 +1,60 @@
+@startuml
+title TypeBlast — Use Case Diagram
+
+left to right direction
+
+skinparam monochrome false
+skinparam shadowing false
+skinparam nodesep 30
+skinparam ranksep 120
+skinparam linetype polyline
+
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+  ArrowColor #333333
+  FontSize 11
+  FontStyle bold
+}
+skinparam actor {
+  BorderColor #222222
+  BackgroundColor #FFFFFF
+  FontSize 11
+  FontStyle bold
+}
+
+actor "User" as user
+
+rectangle "TypeBlast System" {
+
+  package "Direct Actions" {
+    usecase "Start Typing Test" as UC1
+    usecase "Type Text" as UC2
+    usecase "Stop Test &\nView Results" as UC4
+    usecase "Get New Random Text" as UC8
+    usecase "View Status Bar Updates" as UC9
+  }
+
+  package "Sub Functions" {
+    usecase "View Live Highlighting" as UC3
+    usecase "View WPM Score" as UC5
+    usecase "View Accuracy %" as UC6
+    usecase "View Time Elapsed" as UC7
+  }
+}
+
+user --> UC1
+user --> UC2
+user --> UC4
+user --> UC8
+
+UC1 ..> UC8 : <<include>>
+UC2 ..> UC3 : <<include>>
+UC4 ..> UC5 : <<include>>
+UC4 ..> UC6 : <<include>>
+UC4 ..> UC7 : <<include>>
+
+UC9 ..> UC1 : <<extend>>
+UC9 ..> UC4 : <<extend>>
+
+@enduml

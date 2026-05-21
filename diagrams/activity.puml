@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+start
+
+:User clicks "⏹ Stop & Results";
+
+if (Is session active?) then (NO)
+  :Show error: "Start the test first";
+  stop
+else (YES)
+endif
+
+:Call session.stop();
+:Record end_time;
+:Get typed text from typing area widget;
+:Call session.get_results(typed_text);
+:Calculate WPM;
+:Calculate Accuracy %;
+:Calculate Elapsed Time;
+:Count correct characters;
+:Update ⏱ Time label;
+:Update 🚀 WPM label;
+:Update 🎯 Accuracy label;
+:Update ✅ Correct chars label;
+:Disable typing area;
+:Show results messagebox popup;
+:Update status bar: "Test Complete!";
+
+stop
+
+@enduml

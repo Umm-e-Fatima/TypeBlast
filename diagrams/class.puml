@@ -1,0 +1,57 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+
+class Exception {
+}
+
+class TextBank <<typing_text.py>> {
+  {static} +PARAGRAPHS : list
+  {static} +get_random() : str
+  {static} +get_all() : list
+}
+
+class TypingException <<typing_session.py>> {
+}
+
+class TypingSession <<typing_session.py>> {
+  +target_text : str
+  +start_time : float
+  +end_time : float
+  +is_active : bool
+  +__init__(target_text: str)
+  +start() : None
+  +stop() : None
+  +get_wpm(typed_text: str) : float
+  +get_accuracy(typed_text: str) : float
+  +get_elapsed_time() : float
+  +get_results(typed_text: str) : dict
+}
+
+class TypeBlastApp <<gui.py>> {
+  +root : Tk
+  +session : TypingSession
+  +target_text_widget : Text
+  +typing_area : Text
+  +status_var : StringVar
+  +lbl_time : Label
+  +lbl_wpm : Label
+  +lbl_accuracy : Label
+  +lbl_correct : Label
+  +__init__(root: Tk)
+  +setup_gui() : None
+  +start_test() : None
+  +stop_and_results() : None
+  +new_text() : None
+  +on_key_release(event) : None
+}
+
+Exception <|-- TypingException
+TypingSession ..> TypingException : Raises
+TypeBlastApp "1" --> "1" TypingSession : Association
+TypeBlastApp ..> TextBank : Dependency
+TypeBlastApp ..> TypingException : Catches
+
+@enduml
